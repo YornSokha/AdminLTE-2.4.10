@@ -1,29 +1,8 @@
-// function loadArticle() {
-//     var x = new XMLHttpRequest();
-//     x.onreadystatechange = function () {
-//         if (this.readyState == 4 && this.status == 200) {
-//             let articles = JSON.parse(this.response);
-//             $.each(articles["DATA"], function (k, data) {
-//                 let id = data["ID"]
-//                 let title = data["TITLE"]
-//                 let description = data["DESCRIPTION"]
-//                 let row = "<tr><td>" + id + "</td><td>" + title + "</td><td>" + description + "</td>";
-//                 $('tbody').append(row)
-//             })
-//         }
-//     }
-
-//     x.open('GET', 'json/article.json', true);
-//     x.send();
-// }
-
-// loadArticle();
-
-
 $(document).ready(function () {
     let queryRecord = 10;
+    let currentId;
 
-    let interval = setInterval(getArticle, 1000);
+    // let interval = setInterval(getArticle, 1000);
 
     function getQueryUrl() {
         return 'http://api-ams.me/v1/api/articles?page=1&limit=' + queryRecord;
@@ -42,10 +21,11 @@ $(document).ready(function () {
                     let description = v['DESCRIPTION']
                     let button = "<button class='btn btn-sm btn-primary edit' data-id='" + id + "' data-title='" + title + "' data-description='" + description + "'>EDIT</button>"
                     let btnDelete = "<button class='btn btn-sm btn-danger delete' style='margin-left: 5px;' data-id='" + id + "' data-title='" + title + "' data-description='" + description + "'>DELETE</button>"
-
+                    // create row
                     row += "<tr><td>" + id + "</td><td>" + title + "</td><td>" + description + "</td>" + "<td>" + button + btnDelete + "</td>";
 
                 })
+                //clear old rows and append new rows
                 $('tbody').html('')
                 $('tbody').append(row)
             },
@@ -56,7 +36,7 @@ $(document).ready(function () {
     }
 
     getArticle();
-    let currentId;
+
     $(document).on('click', '.edit', (e) => {
         // console.log($(e.target).data('id'))
         currentId = $(e.target).data('id')
@@ -84,7 +64,6 @@ $(document).ready(function () {
             },
             method: 'DELETE',
             success: function (res) {
-                $('tbody').html('')
                 getArticle()
             },
             error: function (err) {
@@ -118,7 +97,6 @@ $(document).ready(function () {
             data: JSON.stringify(data),
             success: function (res) {
                 console.log(res)
-                $('tbody').html('');
                 getArticle()
             },
             error: function (err) {
@@ -133,7 +111,7 @@ $(document).ready(function () {
             return;
         if(_this.val() == '')
             return;
-        if(_this.val() < 0)
+        if(_this.val() < 0 || _this.val() > 100)
             return;
         queryRecord = _this.val();
         getArticle();
@@ -170,17 +148,7 @@ $(document).ready(function () {
             data: JSON.stringify(data),
             success: function (res) {
                 console.log(res)
-                $('tbody').html('');
                 getArticle()
-                // $.each(res['DATA'], function (k, v) {
-                //     let id = v['ID']
-                //     let title = v['TITLE']
-                //     let description = v['DESCRIPTION']
-                //     let button = "<button class='btn btn-outline-primary' data-id='"+id+"'>EDIT</button>"
-                //     let row = "<tr><td>" + id + "</td><td>" + title + "</td><td>" + description + "</td>" + "<td>" + button + "</td>";
-
-                //     $('tbody').append(row)
-                // })
             },
             error: function (err) {
                 console.log(err)
@@ -189,4 +157,27 @@ $(document).ready(function () {
     })
 
 
-})
+});
+
+//JS style
+
+// function loadArticle() {
+//     var x = new XMLHttpRequest();
+//     x.onreadystatechange = function () {
+//         if (this.readyState == 4 && this.status == 200) {
+//             let articles = JSON.parse(this.response);
+//             $.each(articles["DATA"], function (k, data) {
+//                 let id = data["ID"]
+//                 let title = data["TITLE"]
+//                 let description = data["DESCRIPTION"]
+//                 let row = "<tr><td>" + id + "</td><td>" + title + "</td><td>" + description + "</td>";
+//                 $('tbody').append(row)
+//             })
+//         }
+//     }
+
+//     x.open('GET', 'json/article.json', true);
+//     x.send();
+// }
+
+// loadArticle();
