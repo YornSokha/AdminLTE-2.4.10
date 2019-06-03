@@ -23,16 +23,19 @@
 $(document).ready(function () {
     let queryRecord = 10;
 
+    let interval = setInterval(getArticle, 1000);
+
     function getQueryUrl() {
         return 'http://api-ams.me/v1/api/articles?page=1&limit=' + queryRecord;
     }
+
     function getArticle() {
-        $('tbody').html('')
 
         $.ajax({
             url: getQueryUrl(queryRecord),
             method: 'GET',
             success: function (res) {
+                let row = '';
                 $.each(res['DATA'], function (k, v) {
                     let id = v['ID']
                     let title = v['TITLE']
@@ -40,9 +43,11 @@ $(document).ready(function () {
                     let button = "<button class='btn btn-sm btn-primary edit' data-id='" + id + "' data-title='" + title + "' data-description='" + description + "'>EDIT</button>"
                     let btnDelete = "<button class='btn btn-sm btn-danger delete' style='margin-left: 5px;' data-id='" + id + "' data-title='" + title + "' data-description='" + description + "'>DELETE</button>"
 
-                    let row = "<tr><td>" + id + "</td><td>" + title + "</td><td>" + description + "</td>" + "<td>" + button + btnDelete + "</td>";
-                    $('tbody').append(row)
+                    row += "<tr><td>" + id + "</td><td>" + title + "</td><td>" + description + "</td>" + "<td>" + button + btnDelete + "</td>";
+
                 })
+                $('tbody').html('')
+                $('tbody').append(row)
             },
             error: function (err) {
                 console.log(err)
