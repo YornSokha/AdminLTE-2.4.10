@@ -1,8 +1,8 @@
-$(document).ready(function () {
+$(document).ready(function() {
     let queryRecord = 10;
     let currentId;
 
-    // let interval = setInterval(getArticle, 1000);
+    let interval = setInterval(getArticle, 1000);
 
     function getQueryUrl() {
         return 'http://api-ams.me/v1/api/articles?page=1&limit=' + queryRecord;
@@ -13,23 +13,23 @@ $(document).ready(function () {
         $.ajax({
             url: getQueryUrl(queryRecord),
             method: 'GET',
-            success: function (res) {
+            success: function(res) {
                 let row = '';
-                $.each(res['DATA'], function (k, v) {
-                    let id = v['ID']
-                    let title = v['TITLE']
-                    let description = v['DESCRIPTION']
-                    let button = "<button class='btn btn-sm btn-primary edit' data-id='" + id + "' data-title='" + title + "' data-description='" + description + "'>EDIT</button>"
-                    let btnDelete = "<button class='btn btn-sm btn-danger delete' style='margin-left: 5px;' data-id='" + id + "' data-title='" + title + "' data-description='" + description + "'>DELETE</button>"
-                    // create row
-                    row += "<tr><td>" + id + "</td><td>" + title + "</td><td>" + description + "</td>" + "<td>" + button + btnDelete + "</td>";
+                $.each(res['DATA'], function(k, v) {
+                        let id = v['ID']
+                        let title = v['TITLE']
+                        let description = v['DESCRIPTION']
+                        let button = "<button class='btn btn-sm btn-primary edit' data-id='" + id + "' data-title='" + title + "' data-description='" + description + "'>EDIT</button>"
+                        let btnDelete = "<button class='btn btn-sm btn-danger delete' style='margin-left: 5px;' data-id='" + id + "' data-title='" + title + "' data-description='" + description + "'>DELETE</button>"
+                            // create row
+                        row += "<tr><td>" + id + "</td><td>" + title + "</td><td>" + description + "</td>" + "<td>" + button + btnDelete + "</td>";
 
-                })
-                //clear old rows and append new rows
+                    })
+                    //clear old rows and append new rows
                 $('tbody').html('')
                 $('tbody').append(row)
             },
-            error: function (err) {
+            error: function(err) {
                 console.log(err)
             }
         })
@@ -43,7 +43,7 @@ $(document).ready(function () {
 
         $('#title').val($(e.target).data('title'))
         $('#description').val($(e.target).data('description'))
-        // console.log(typeof(currentId))
+            // console.log(typeof(currentId))
         $('.header-title').text('Edit')
         $('.footer-button').find('.btn-primary').addClass('edit-modal').removeClass('add-modal');
         $('#action').modal('show')
@@ -63,10 +63,10 @@ $(document).ready(function () {
                 'content-type': 'application/json'
             },
             method: 'DELETE',
-            success: function (res) {
+            success: function(res) {
                 getArticle()
             },
-            error: function (err) {
+            error: function(err) {
                 console.log(err)
             }
         })
@@ -76,7 +76,7 @@ $(document).ready(function () {
 
         let title = $('#title').val()
         let description = $('#description').val()
-        // console.log("title :" + title + " description : " + description)
+            // console.log("title :" + title + " description : " + description)
         let data = {
             "TITLE": title,
             "DESCRIPTION": description,
@@ -95,23 +95,23 @@ $(document).ready(function () {
             },
             method: 'PUT',
             data: JSON.stringify(data),
-            success: function (res) {
+            success: function(res) {
                 console.log(res)
                 getArticle()
             },
-            error: function (err) {
+            error: function(err) {
                 console.log(err)
             }
         })
     })
 
-    $(document).on('change', '#records', ()=>{
+    $(document).on('change', '#records', () => {
         let _this = $('#records');
-        if(isNaN(_this.val()))
+        if (isNaN(_this.val()))
             return;
-        if(_this.val() == '')
+        if (_this.val() == '')
             return;
-        if(_this.val() < 0 || _this.val() > 100)
+        if (_this.val() < 0 || _this.val() > 100)
             return;
         queryRecord = _this.val();
         getArticle();
@@ -128,7 +128,7 @@ $(document).ready(function () {
     $(document).on('click', '.add-modal', () => {
         let title = $('#title').val()
         let description = $('#description').val()
-        // console.log("title :" + title + " description : " + description)
+            // console.log("title :" + title + " description : " + description)
         let data = {
             "TITLE": title,
             "DESCRIPTION": description,
@@ -146,11 +146,11 @@ $(document).ready(function () {
             },
             method: 'POST',
             data: JSON.stringify(data),
-            success: function (res) {
+            success: function(res) {
                 console.log(res)
                 getArticle()
             },
-            error: function (err) {
+            error: function(err) {
                 console.log(err)
             }
         })
